@@ -4,6 +4,7 @@ This repository contains project knowledge and documentation for the KiSS (Keepi
 
 ## Documents
 - [Project Knowledge Document](README.md) -- Full project context: mission, research history, donor tiers, launch roadmap
+- [IR Developer Workflow Guide](IR_Developer_Workflow.md) -- Step-by-step reference for developers working on the Instant Recall codebase (architecture, page creation, deployment, GEO rules)
 
 ## Key Links
 - [KiSS Launch Package (PDF)](https://github.com/rjmjr1962831/carla/blob/main/KiSS_NonProfit_Launch_Package.pdf) -- Original launch package document
