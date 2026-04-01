@@ -1,421 +1,146 @@
-# Instant Recall -- Project Knowledge Document
+# KiSS Program -- Project Knowledge Document
 
-**For:** IR staff AI assistants (Claude, ChatGPT, Cursor, etc.)
-**Purpose:** Drop this document into your AI's context so it understands the Instant Recall project, architecture, and rules.
+**Keeping in School Shape**
+**For:** AI assistants (Claude, ChatGPT, Cursor, etc.) working with the KiSS Foundation team
 **Last updated:** 2026-04-01
 
 ---
 
-## 1. What Is Instant Recall?
+## 1. What Is the KiSS Program?
 
-**Instant Recall** is a B2B food recall preparedness and response platform, operated by Instant Recall LLC (a BellTower Technologies solution). Founded in 2000, with 25+ years in food recall management.
+The Keeping in School Shape (KiSS) Program is a research-backed, technology-driven intervention that combats learning loss during academic breaks by delivering daily mathematics review problems directly to students via text message or email.
 
-- **HQ:** 5900 South Lake Forest Dr., Suite 300, McKinney, TX 75070
-- **Phone:** +1-214-220-8000
-- **Dev site:** https://ir-zeta.vercel.app
-- **Production site:** https://www.instantrecall.com (currently Squarespace; DNS cutover to Vercel pending)
-- **Recall portal:** https://www.myinstantrecall.com
-- **Corporate dashboard:** https://dashboard.belltowertech.com/login
+- **Founded by:** Dr. Carla van de Sande, Associate Professor of Mathematics Education, Arizona State University
+- **Research span:** 8 years (2016-2024), 6 published studies, 6 peer-reviewed conferences
+- **Cost per message:** $0.003
+- **Participation rate:** 81% (text message delivery)
+- **Platform:** Qualtrics-based, SMS/email delivery
 
-### Three Service Lines
+### How It Works
 
-1. **Recall Preparedness Consulting** -- Proactive planning, readiness assessments, recall playbooks, simulated exercises, team training, supply chain mapping.
-2. **Recall Communications Management** -- Automated multi-channel notification (email, SMS, voice, fax) that reaches every affected party in minutes. Real-time delivery tracking, escalation rules, distribution list management.
-3. **Regulatory Reporting and Audit Response** -- FDA, USDA, FSMA-compliant documentation, audit trails, timestamped records, regulatory report generation on demand.
+Each day during a school break, participating students receive a multiple-choice math review problem calibrated to their course level. The platform provides immediate feedback, step-by-step solutions, optional hints, and challenge problems. Growth mindset messaging is woven throughout, encouraging students to view mistakes as learning opportunities.
 
-### Expanding: Consumer-Facing Notification
+### Research History
 
-Closing the last mile of recall communication. The current system relies on passive press releases and in-store signage. Instant Recall is building direct-to-consumer notification to dramatically increase the industry's 6% participation rate.
+| Year | Version | Key Milestone |
+|------|---------|---------------|
+| 2016-17 | KiSS 1.0 | First pilot: 62 students, manual text delivery; 81% participation rate |
+| 2018 | KiSS 2.0 | 184 students enrolled; 74% accuracy; automated delivery |
+| 2019 | KiSS 3.0 | Transitioned to Qualtrics; added confidence ratings and charity incentives |
+| 2020-21 | KiSS 4.0 | 307 students, 5,273 responses; confidence-accuracy correlation confirmed |
+| 2022 | KiSS 5.0 | Six-iteration synthesis published; growth mindset integration |
+| 2023 | KiSS 6.0 | Undergraduate research team; median 95.5s per activity; international publication |
 
----
+### Key Research Findings
 
-## 2. GEO Mission (North Star)
+- Text message delivery consistently outperformed all other channels (85% response rate vs. 30% for Facebook)
+- Confidence and accuracy are positively correlated; hint usage improves accuracy regardless of confidence level
+- Participation is sustained across entire break periods with low exit rates
+- Adaptable across course levels, break lengths, and institutional contexts; extensible to non-math subjects
+- Charitable donation incentives effectively motivate millennial and Gen Z students
 
-**Become the source AI cites for food recall preparedness and notification information.**
-
-Every decision, every page, every piece of structured data serves one goal: when someone asks an AI system about food recall preparedness, recall communications, or B2B recall management, Instant Recall is the answer it gives.
-
-We use an 8-signal GEO (Generative Engine Optimization) framework targeting the signals AI systems use to decide what to cite:
-
-| # | Signal | Status | Notes |
-|---|--------|--------|-------|
-| 1 | MCP (Model Context Protocol) | FAIL | `/.well-known/mcp.json` not yet deployed |
-| 2 | llms.txt | PASS | Returns valid markdown |
-| 3 | Clean-Room HTML | PASS | Zero JS frameworks, inline CSS only |
-| 4 | AI Content Feed | FAIL | `/ai-content-index.json` not yet deployed |
-| 5 | JSON-LD | PASS | Organization, WebSite, SearchAction, Service, BreadcrumbList on all pages |
-| 6 | TTFB < 100ms | PASS | Homepage ~136ms, /solution ~260ms |
-| 7 | AI Bots Allowed | PASS | robots.txt welcomes all AI crawlers |
-| 8 | HTTP/3 | FAIL | Vercel free tier limitation |
-
-**Current GEO Score: ~42/100** (as of 2026-03-30). Passing 5/8 signals.
-
-**The rule:** Every change must enhance GEO or have no effect. If a change could hurt AI citability or search visibility, stop and ask before executing.
+Publications span SITE, E-Learn (AACE), PMENA, EdMedia, EDULEARN, and the Educational Technology Research and Development journal. Dr. van de Sande received the Academic Innovator award from ASU's Ira A. Fulton Schools of Engineering in 2022.
 
 ---
 
-## 3. Tech Stack
+## 2. Mission Statement
 
-### Architecture
+> "The KiSS Foundation exists to eliminate preventable learning loss in mathematics by providing every school in America free access to a research-proven, technology-driven daily review platform, ensuring that no student falls behind simply because school is not in session."
 
-```
-Bot/User --> Vercel CDN --> api/html.js (edge proxy) --> Supabase Edge Function (serve-html)
-                                                              |
-                                                         Clean-room HTML
-                                                         (inline CSS, zero JS, JSON-LD)
-```
+### Core Values
 
-- **Frontend/Proxy:** Vercel edge proxy (`api/html.js`) fetches HTML from Supabase, passes through Cache-Control headers, sets `Content-Type: text/html`
-- **Backend:** Supabase Deno Edge Functions -- `serve-html` renders clean-room HTML for every page
-- **No React SPA** -- all bot-facing pages are server-rendered clean-room HTML with inline CSS, zero JavaScript
-- **Database:** Supabase PostgreSQL (project: `dewbyvlbmkersxjrcknm`)
-- **Routing:** `vercel.json` rewrites map every URL to either a Supabase edge function (via api/html.js) or a Vercel API route
-- **Brand:** Dark navy (#0b0b1a) + gold (#c8a951), Raleway font
+- **Evidence-Based:** Every design decision grounded in eight years of published research on retrieval practice, growth mindset, and behavioral nudge theory
+- **Accessible:** Delivered via text message and email; no apps, no devices, no bandwidth required beyond basic SMS
+- **Equitable:** Free licensing for all U.S. schools ensures under-resourced districts have equal access
+- **Growth-Oriented:** Growth mindset messaging embedded in every interaction
+- **Scalable:** Built on Qualtrics; can serve thousands of students at fractions of a cent per message
 
-### Key Infrastructure
+### Vision
 
-| Component | Details |
-|-----------|---------|
-| GitHub repo | `rjmjr1962831/ir` |
-| Vercel project | `ir` (auto-deploys from main) |
-| Supabase project | `dewbyvlbmkersxjrcknm` |
-| Edge functions | `serve-html` (all pages), `refresh-site-freshness` (daily cron) |
-| Deploy command | `npx supabase functions deploy serve-html --no-verify-jwt` |
-
-### AI Discovery Endpoints
-
-| Endpoint | Purpose |
-|----------|---------|
-| `/robots.txt` | Welcomes all AI crawlers by name |
-| `/llms.txt` | LLM-readable site summary |
-| `/llms-full.txt` | Extended AI reference document |
-| `/ai-content-index.json` | Machine-readable content manifest |
-| `/for-ai.txt` | Additional AI-readable summary |
-| `/sitemap.xml` | XML sitemap with lastmod dates |
+By 2030, reach 1 million students annually across all 50 states. Every student returns from summer, winter, and spring breaks ready to learn.
 
 ---
 
-## 4. Pages
+## 3. The Problem: Learning Loss
 
-| Path | Description |
-|------|-------------|
-| `/` | Homepage -- hero, 3 service cards, 7 feature cards, trust indicators |
-| `/solution` | Services detail page |
-| `/contact-instant-recall` | Contact routing (urgent recall, sales, opt-out) |
-| `/contact` | Direct contact |
-| `/about-us` | Team bios with headshots |
-| `/portal` | MyInstantRecall + corporate dashboard login links |
-| `/schedule` | Schedule a consultation |
-| `/privacy-policy` | Privacy policy |
-| `/terms-and-conditions` | Terms of service |
-| `/crawl-stats` | Bot crawl analytics |
-| `/methodology` | Methodology page |
-| `/incident-response` | Incident response info |
-| `/cost-recovery` | Cost recovery info |
-| `/regulatory-reporting` | Regulatory reporting info |
-| `/technology-prowess` | Technology capabilities |
-| `/industry-standard` | Industry standard info |
-| `/customer-quotes-solutions` | Customer quotes and solutions |
-| `/who-trusts-us` | Trust/social proof |
-| `/research` | Research index (3 white papers) |
-| `/research/industry-survey` | Product Recall Notification Industry Survey |
-| `/research/regulatory-environment` | Regulatory Environment of Product Recalls |
-| `/research/legal-case-data` | Legal Case Data and Liability Research |
-| `/geo-ledger` | Internal GEO ledger (noindexed) |
-| `/dashboard` | Internal GEO score dashboard (noindexed) |
+- Students lose **2-3 months** of math proficiency during summer break alone
+- **70% of Americans** are unaware of learning loss affecting their children
+- Schools spend **$1,500-$3,000 per student annually** on remediation
+- Disproportionately affects low-income students; compounds year over year
+- Winter and spring breaks add further erosion that goes largely unaddressed
+- Post-pandemic learning loss has made math remediation a national priority
+- Federal ESSER funding is expiring, leaving districts searching for cost-effective solutions
 
 ---
 
-## 5. Database Schema
+## 4. Donor Tiers
 
-Supabase PostgreSQL project `dewbyvlbmkersxjrcknm`. Seven tables in the `public` schema:
-
-### contact_submissions
-Stores inbound contact form submissions.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | bigint | PK, auto-increment |
-| ts | timestamptz | Default now() |
-| email | text | Required |
-| company | text | |
-| num_locations | text | |
-| first_name | text | |
-| last_name | text | |
-| work_email | text | |
-| phone | text | |
-| comments | text | |
-| source | text | Default 'website' |
-| status | text | Default 'new' |
-| read_at | timestamptz | |
-
-### crawl_log
-Records every bot crawl event (fired from `serve-html` edge function).
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | bigint | PK, auto-increment |
-| ts | timestamptz | Default now() |
-| bot | text | Bot name |
-| path | text | URL path crawled |
-| ua | text | Full user-agent |
-| status | integer | Default 200 |
-| ip | text | |
-
-Indexes: `idx_crawl_log_bot (bot, ts DESC)`, `idx_crawl_log_path (path, ts DESC)`, `idx_crawl_log_ts (ts DESC)`
-
-### geo_ledger_entries
-Tracks every GEO-related change made to the project.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | integer | PK |
-| entry_date | date | Default CURRENT_DATE |
-| signal_category | text | Which GEO signal area |
-| action_summary | text | What was done |
-| rationale | text | Why |
-| how_steps | jsonb | Implementation steps |
-| evidence_before | text | State before change |
-| evidence_after | text | State after change |
-| verification_cmd | text | How to verify |
-| status | text | Default 'Pending Review' |
-| impact | text | |
-| pending_items | jsonb | |
-| created_at | timestamptz | |
-
-### geo_score_dimensions
-Seven weighted dimensions that compose the GEO score.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | integer | PK |
-| dimension_name | text | Unique |
-| weight | numeric | Percentage weight |
-| score | integer | 0-100 |
-| notes | text | |
-| last_assessed | date | |
-| updated_at | timestamptz | |
-
-### geo_score_history
-Historical composite GEO scores over time.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | integer | PK |
-| score_date | date | |
-| score | integer | Composite score |
-| label | text | Description of what changed |
-| created_at | timestamptz | |
-
-### geo_signal_status
-Current pass/fail status for each of the 8 GEO signals.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | integer | PK |
-| signal_num | integer | 1-8, unique |
-| signal_name | text | |
-| signal_def | text | Definition |
-| status | text | 'PASS' or 'FAIL' |
-| date_last_touched | date | |
-| pass_requires | text | What constitutes a PASS |
-| current_status_note | text | |
-| updated_at | timestamptz | |
-
-### site_freshness
-Singleton row (id=1) tracking overall site freshness metadata.
-
-| Column | Type | Notes |
-|--------|------|-------|
-| id | integer | Always 1 |
-| last_content_update | timestamptz | |
-| last_ai_surface_update | timestamptz | |
-| page_count | integer | |
-| research_count | integer | |
-| latest_fda_recall_date | text | |
-| latest_fda_recall_title | text | |
-| updated_at | timestamptz | |
-
-### RLS Policies
-
-| Table | Policy | Access |
-|-------|--------|--------|
-| contact_submissions | service_role_all | Service role only |
-| crawl_log | service_role_all | Service role only |
-| site_freshness | anon can read | Anon SELECT allowed |
-| site_freshness | service_role can do anything | Full service role access |
-| geo_* tables | No policies | Need RLS enabled (security gap) |
-
-### Cron Jobs
-
-| Job | Schedule | Action |
-|-----|----------|--------|
-| refresh-site-freshness | `0 4 * * *` (daily 4 AM UTC) | Updates the site_freshness singleton row |
+| Tier | Annual Commitment | Recognition |
+|------|-------------------|-------------|
+| Champion | $500,000+ | Named program partner; board advisory seat; co-branded research publications |
+| Innovator | $100,000-$499,999 | Logo on platform; annual impact report; school district naming rights |
+| Supporter | $25,000-$99,999 | Website recognition; quarterly impact updates; donor spotlight feature |
+| Friend | $5,000-$24,999 | Annual report acknowledgment; donor wall listing |
 
 ---
 
-## 6. Git and Deployment
+## 5. Launch Roadmap
 
-### Branch Flow
+### Phase 1: Legal Formation (Months 1-3)
 
-```
-feature-branch --> staging --> main
-```
+1. Choose a legal name (confirm with AZ Corporation Commission and USPTO; consider "KiSS Foundation" or "KiSS Education")
+2. Recruit founding board (minimum 3 directors required in AZ: education expert, business/operations lead, community/fundraising member)
+3. Draft Articles of Incorporation (file with AZ Corporation Commission; include IRS 501(c)(3) language)
+4. Draft Bylaws (board structure, officer roles, meeting requirements, conflict of interest policy, fiscal year)
+5. Obtain EIN (IRS.gov, free, immediate)
+6. File IRS Form 1023 or 1023-EZ for 501(c)(3) status ($275-$600 fee)
+7. Register with AZ Secretary of State (charitable organization registration)
+8. Open a bank account (business checking under organization's EIN)
+9. Obtain insurance (D&O liability + general liability)
 
-- **Always create a feature branch** before writing code. Branch off staging.
-- **Never commit directly to staging or main.**
-- **Never merge main into staging.**
-- Vercel auto-deploys from `main`.
+### Phase 2: Intellectual Property and Licensing (Months 2-4)
 
-### Deployment Commands
+1. Negotiate IP assignment or license from ASU (Skysong Innovations technology transfer office)
+2. File trademark for "KiSS" / "Keeping in School Shape" with USPTO
+3. Create standard free-use license agreement for school districts (data privacy, acceptable use, support)
+4. Review FERPA compliance
+5. Review state data privacy laws (COPPA for K-12 expansion, state-specific student data laws)
 
-| Command | What It Does |
-|---------|-------------|
-| `git push origin staging` | Push to staging (only when instructed: `pts`) |
-| `npm run merge-to-main` | Merge staging to main (only when instructed: `ptm`) |
-| `npx supabase functions deploy serve-html --no-verify-jwt` | Deploy the main edge function |
-| `npx supabase functions deploy refresh-site-freshness --no-verify-jwt` | Deploy the freshness cron function |
+### Phase 3: Platform Preparation (Months 3-6)
 
-### Qodo Review Gate (Mandatory)
+1. Audit current Qualtrics platform (architecture, question banks, delivery workflows, analytics)
+2. Evaluate scaling needs (can Qualtrics support 10K-100K+ students, or migrate?)
+3. Expand content library (Algebra, Geometry, Pre-Calc, Statistics, additional grade levels)
+4. Build school admin dashboard (self-service enrollment, break schedule customization, participation data)
+5. Set up SMS/email delivery pipeline (evaluate Twilio, SendGrid, or similar)
+6. Implement analytics and reporting (automated impact reports for schools and donors)
 
-Every feature branch must go through Qodo automated code review before merging to staging:
+### Phase 4: Fundraising and Partnerships (Months 3-8)
 
-1. Push the feature branch to origin
-2. Create a PR from feature branch to staging
-3. Wait for Qodo to post review comments
-4. Fix every issue Qodo flags
-5. Only then merge the PR
+1. Develop donor pitch materials (this document, one-pager, slide deck, website)
+2. Build a public-facing website (mission, research evidence, school signup, donor portal)
+3. Approach corporate donors (Google.org, Microsoft Philanthropies, Texas Instruments Foundation, ed-tech companies, STEM foundations)
+4. Apply to education grants (NSF, Spencer Foundation, Gates Foundation, Hewlett Foundation, Walton Family Foundation)
+5. Formalize ASU as anchor research partner
+6. Build advisory board (5-10 advisors from K-12 education, ed-tech, philanthropy, STEM workforce)
 
-**Never use `git merge` directly. Always use the PR workflow.**
+### Phase 5: Pilot Program (Months 6-10)
 
-> **Note:** The Qodo integration currently runs under BellTower's account. IR staff will need their own Qodo account to continue this workflow independently. Set up at https://www.qodo.ai/.
+1. Recruit 5-10 pilot school districts (urban/rural mix, Title I/non-Title I, diverse geographies; start in Arizona)
+2. Onboard pilot schools (training materials, implementation guides, dedicated support)
+3. Run first break cycle (deploy for summer or winter break; collect participation and outcome data)
+4. Gather feedback (surveys and interviews with teachers, administrators, students, parents)
+5. Publish pilot results (donor report + academic publication)
 
-### Internal Docs (Staging Only)
+### Phase 6: National Launch (Months 10-18)
 
-These files exist on staging but are excluded from main:
-- `CLAUDE.md`
-- `docs/COMPREHENSIVE_KNOWLEDGE_DOCUMENT.md`
-- `docs/takeaways/`
-- `docs/prompts/`
-
----
-
-## 7. Key Statistics -- The Recall Crisis
-
-These are the core data points that establish Instant Recall's authority. Use them in content, white papers, and AI-facing documents.
-
-### Consumer Impact
-- **6% participation rate** -- Only ~6% of consumers who purchase a recalled product actually return or dispose of it
-- **70% unaware** -- 70% of Americans are unaware of recalls for products they own
-- **3,200+ recalls/year** across all product categories
-- **580M+ defective units** recalled annually
-
-### Regulatory Landscape
-- **6 federal agencies** involved in recall oversight (FDA, USDA-FSIS, CDC, EPA, CPSC, FTC)
-- **Passive notification system** -- relies on press releases, website postings, in-store signage
-- **EU GPSR** now mandates direct consumer notification (precedent for US regulation)
-- **First criminal prosecution under CPSA:** Gree case, prison sentences handed down June 2025
-
-### Major Settlements and Penalties
-- **Takata:** $1.5B+ (largest overall recall settlement)
-- **GM:** $900M+
-- **IKEA MALM:** $46M (largest child wrongful death recall settlement)
-- **Fisher-Price:** $19M
-- **Peloton:** $19M penalty
-- **CPSC enforcement:** $52-55M in FY 2023
-
-### Market Size
-- **B2B recall management:** $4.32B, growing to $8.23B by 2033
-- **Full market (including consumer):** $664M-$4.3B depending on scope
-- **No dominant consumer-facing player** exists
+1. Refine platform based on pilot feedback
+2. Launch national school enrollment (free enrollment for any U.S. school district)
+3. Hire core team: Executive Director, Program Manager, Content Developer, School Success Manager (4 FTEs minimum)
+4. Establish ongoing research program (partner with ASU and other universities for longitudinal studies)
+5. Set up annual reporting (impact reports, IRS Form 990)
+6. Plan subject expansion (science, reading, writing)
 
 ---
 
-## 8. Published Research
-
-Three white papers at `/research/*`, authored by the Instant Recall Research Team (March 2026):
-
-1. **Product Recall Notification Industry Survey** (`/research/industry-survey`) -- Market analysis, competitor landscape, consumer pain points, international systems comparison.
-
-2. **The Regulatory Environment of Product Recalls** (`/research/regulatory-environment`) -- Six federal agencies, key legislation (CPSA, CPSIA, FSMA, STURDY Act), mandatory reporting, penalty trends.
-
-3. **Legal Case Data and Liability Research** (`/research/legal-case-data`) -- Major lawsuits, post-sale duty to warn, retailer liability, CPSC enforcement, class action patterns.
-
----
-
-## 9. TinaCMS (Content Management -- In Progress)
-
-A TinaCMS integration is in progress on branch `feature/tinacms-setup`:
-
-- **Config:** `tina/config.ts` with a `Pages` collection
-- **Content:** `content/pages/` (markdown files for home, about-us, contact, methodology, solution, incident-response)
-- **Local dev:** `npm run dev` launches admin UI at `localhost:4001/admin`
-- **Status:** Local dev working; not yet connected to Tina Cloud
-
-### Remaining Steps
-1. Connect to Tina Cloud (need `TINA_CLIENT_ID` and `TINA_TOKEN`)
-2. Bridge markdown content to serve-html templates
-3. Deploy admin via vercel.json rewrite
-4. Add remaining pages to the collection
-5. PR + Qodo review before merge to staging
-
----
-
-## 10. AI Agent Execution Rules
-
-### Run Everything in the Background
-
-All multi-step tasks (file reads, fetches, code analysis, rewrites, research, deployments) MUST run as background agents. Use multiple agents in parallel whenever work can be split. Never block the conversation waiting for a task to complete. Stay available to the user at all times.
-
-If a task involves more than one tool call, launch it as a background agent. The goal is zero inline blocking.
-
-### Always Review Code with Qodo
-
-No code reaches staging without Qodo review. This is a hard gate, not a suggestion. The workflow is:
-
-1. Write code on a feature branch
-2. Push the branch and create a PR to staging
-3. Wait for Qodo to review
-4. Fix every issue Qodo flags
-5. Only then merge
-
-Skipping Qodo review is a deployment process violation. If Qodo is unavailable, wait; do not merge without it.
-
----
-
-## 11. Content Rules
-
-- **No em dashes.** Use commas, semicolons, periods, or restructured sentences.
-- **"ALL" means every single instance.** Fix every file, every page, every occurrence.
-- **Verification protocol:** You are not done until you confirm the change worked. Deploy, load the live page, verify. "Code updated" is not completion. "Deployed. Verified at [URL]." is.
-
----
-
-## 12. What NOT to Do
-
-1. **Never push to main** without explicit permission (`ptm` command). Main deploys to production.
-2. **Never skip Qodo review.** Every feature branch gets a PR and Qodo review before merging.
-3. **Never merge main into staging.** Flow is always staging to main.
-4. **Never commit directly to staging.** Always use a feature branch.
-5. **Never make changes that could hurt GEO** without asking first.
-6. **Never change robots.txt, canonical tags, or noindex directives** without asking first.
-7. **Never make production database changes** without asking first.
-8. **Never suggest production URLs** -- the dashboard and dev site are internal working pages.
-
----
-
-## 13. Priority Next Steps
-
-As of 2026-04-01, the key priorities are:
-
-1. **Fix remaining GEO signal failures** -- Deploy mcp.json and ai-content-index.json (2 of the 3 FAIL signals are fixable)
-2. **Improve citation readiness** -- Currently scored 20/100. Needs methodology page, quotable data blocks, FAQ
-3. **Add freshness signals** -- Blog, news feed, dated content, timestamps
-4. **Build authority** -- Backlinks, external mentions, press coverage, partnerships
-5. **DNS cutover** -- Move instantrecall.com from Squarespace to Vercel (pending business decision)
-6. **Complete TinaCMS integration** -- Enable non-technical staff to update content
-7. **Enable RLS on geo_* tables** -- Security gap identified; needs policies added
-
----
-
-*This document is a handoff reference for AI assistants working on the Instant Recall project. For the authoritative Single Source of Truth, see `docs/COMPREHENSIVE_KNOWLEDGE_DOCUMENT.md` on the staging branch.*
+*This document was prepared based on Dr. Carla van de Sande's published research (2016-2023) spanning six peer-reviewed conference publications and the Educational Technology Research and Development journal.*
